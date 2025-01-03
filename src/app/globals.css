@@ -20,7 +20,8 @@ nav * {
   display: flex;
   align-items: center;
   height: 100%;
-  width: 100px
+  width: auto;
+  gap: 8px;
 }
 
 .navigation-links {

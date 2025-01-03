@@ -1,0 +1,40 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  background-color: #f3f4f6;
+  color: #1f2937;
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove any default margins/paddings that might affect height */
+nav * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+.logo-icon {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100px
+}
+
+.navigation-links {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  flex-grow: 1;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.navigation-bar {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}

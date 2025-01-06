@@ -1,30 +1,70 @@
+'use client'
+
 import Link from 'next/link'
-import { FaCode } from 'react-icons/fa'
+import { useState } from 'react'
 
 export default function Navbar() {
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
+
   return (
     <nav className="navigation-bar h-[30px] w-full bg-gradient-to-r from-blue-600 to-blue-800 fixed top-0 left-0 z-50">
-      {/* Logo and Title */}
-      <div className="flex items-center h-full">
+      <div className="flex items-center justify-between h-full px-4">
         <Link href="/" className="logo-icon flex items-center">
-          <FaCode className="h-5 w-5 text-black" />
-          <div className="text-black font-black text-lg ml-2 font-bold">Helpy Chatty</div>
+          <span className="text-2xl">💻</span>
+          <div className="text-black font-black text-2xl ml-3 font-bold">Helpy Chatty</div>
         </Link>
-      </div>
-    
-      {/* Navigation Links */}
-      <div className="navigation-links">
-        <Link href="/who" className="text-black text-sm hover:text-gray-700">
-          Who
-        </Link>
-        <span className="text-black/50">|</span>
-        <Link href="/what" className="text-black text-sm hover:text-gray-700">
-          What
-        </Link>
-        <span className="text-black/50">|</span>
-        <Link href="/how" className="text-black text-sm hover:text-gray-700">
-          How
-        </Link>
+
+        {/* Regular Navigation Links */}
+        <div className="navigation-links">
+          <Link href="/what" className="text-black text-2xl hover:text-gray-700">
+            What?
+          </Link>
+          <span className="text-black/50 text-2xl mx-3">|</span>
+          <Link href="/who" className="text-black text-2xl hover:text-gray-700">
+            Who?
+          </Link>
+          <span className="text-black/50 text-2xl mx-3">|</span>
+          <Link href="/how" className="text-black text-2xl hover:text-gray-700">
+            How?
+          </Link>
+        </div>
+
+        {/* Hamburger Menu */}
+        <button 
+          className="hamburger-menu text-black"
+          onClick={() => setIsMenuOpen(!isMenuOpen)}
+        >
+          {isMenuOpen ? '✕' : '☰'}
+        </button>
+
+        {/* Mobile Menu */}
+        {isMenuOpen && (
+          <div className="absolute top-[30px] left-0 w-full bg-blue-700 py-2">
+            <div className="flex flex-col items-center space-y-2">
+              <Link 
+                href="/what" 
+                className="text-black hover:text-gray-700 text-xl w-full text-center py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                What?
+              </Link>
+              <Link 
+                href="/who" 
+                className="text-black hover:text-gray-700 text-xl w-full text-center py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Who?
+              </Link>
+              <Link 
+                href="/how" 
+                className="text-black hover:text-gray-700 text-xl w-full text-center py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                How?
+              </Link>
+            </div>
+          </div>
+        )}
       </div>
     </nav>
   )

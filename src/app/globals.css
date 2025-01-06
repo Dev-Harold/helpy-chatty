@@ -39,3 +39,39 @@ nav * {
   height: 100%;
   width: 100%;
 }
+
+/* Navigation styles */
+.navigation-links {
+  display: flex;
+  align-items: center;
+}
+
+/* Hamburger menu icon - hidden by default */
+.hamburger-menu {
+  display: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 768px) {
+  .navigation-links {
+    display: none;  /* Hide the regular navigation */
+  }
+  
+  .hamburger-menu {
+    display: block;  /* Show hamburger menu */
+  }
+}
+
+/* Button responsive styles */
+.chat-button {
+  width: 180px;  /* Default width */
+}
+
+@media (max-width: 768px) {
+  .chat-button {
+    width: 100%;  /* Full width on mobile */
+    max-width: 300px;  /* Optional: maximum width */
+  }
+}

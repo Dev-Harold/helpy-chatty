@@ -13,7 +13,7 @@ export default function Home() {
                 Something not working? Need help with a tech problem? Get Live Help Now! ➡
               </div>
               <Link href="/chat">
-                <button className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-md transition-colors h-[140px] w-[180px] text-2xl border-[3px] border-black">
+                <button className="chat-button bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-4 rounded-md transition-colors h-[140px] text-2xl border-[3px] border-black">
                   Chat Now
                 </button>
               </Link>

@@ -46,6 +46,12 @@ nav * {
   align-items: center;
 }
 
+.review-image {
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+}
+
 /* Hamburger menu icon - hidden by default */
 .hamburger-menu {
   display: none;
@@ -74,4 +80,10 @@ nav * {
     width: 100%;  /* Full width on mobile */
     max-width: 300px;  /* Optional: maximum width */
   }
+}
+
+.container {
+    display: flex;
+    align-items: flex-start;  /* This will align text to top */
+    gap: 1rem;
 }

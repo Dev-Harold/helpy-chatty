@@ -1,7 +1,10 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  /* config options here */
+  transpilePackages: ["stream-chat-react"],
+  images: {
+    domains: ['cdn.pixabay.com', 'mysterymtg.com']
+  }
 };
 
 export default nextConfig;

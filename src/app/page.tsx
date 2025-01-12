@@ -17,9 +17,9 @@ const reviews = [
     author: "Phillipe"
   },
   {
-    image: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    message: "Good Site",
-    author: "Magda"
+    image: "https://mysterymtg.com/cdn/shop/files/f15c8803-f33a-4530-9882-bff1bf810c19_800x.jpg?v=1724909693",
+    message: "Doggo :D",
+    author: "Yoshimaru"
   }
   
 ]

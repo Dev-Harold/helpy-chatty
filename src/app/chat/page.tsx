@@ -14,14 +14,14 @@ import {
 import "stream-chat-react/dist/css/v2/index.css";
 const apiKey = 'saqx9aqwu678';
 const userId = 'test-user';
-const userName = 'Anakin Skywalker';
+//const userName = 'Anakin Skywalker';
 //FIXME: get user token from backend
 const token =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidGVzdC11c2VyIn0.M4BmkB9_r0VEl3MwkTEoCOhGFWqBabsQOFGu6VBzIaI';
 
   const filters = { members: { $in: [userId] }, type: "messaging" };
   const options = { presence: true, state: true };
-  const sort = { last_message_at: -1 };
+  // const sort = { last_message_at: -1 };
 
 export default function ChatPage() {
   const client = useCreateChatClient({

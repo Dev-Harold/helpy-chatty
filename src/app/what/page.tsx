@@ -12,12 +12,12 @@ export default function WhatPage() {
             <div className="space-y-6 text-lg text-gray-700">
               <p>
                 Helpy Chatty is a dedicated platform designed to bridge the technology gap for seniors in our society. 
-                We understand that navigating today's digital world can be challenging, which is why we're here to help.
+                We understand that navigating today&apos;s digital world can be challenging, which is why we&apos;re here to help.
               </p>
 
               <p>
                 Our unique approach connects tech-savvy students directly with seniors for one-on-one support sessions. 
-                Whether it's troubleshooting a computer issue, learning to use a new smartphone, or understanding social media, 
+                Whether it&apos;s troubleshooting a computer issue, learning to use a new smartphone, or understanding social media, 
                 our student volunteers are here to provide patient, personalized assistance.
               </p>
 

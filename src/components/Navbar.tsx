@@ -27,6 +27,9 @@ export default function Navbar() {
           <Link href="/how" className="text-black text-2xl hover:text-gray-700">
             How?
           </Link>
+          <Link href="/authentication" className="text-black text-2xl hover:text-gray-700">
+            Login
+          </Link>
         </div>
 
         {/* Hamburger Menu */}
@@ -61,6 +64,13 @@ export default function Navbar() {
                 onClick={() => setIsMenuOpen(false)}
               >
                 How?
+              </Link>
+              <Link 
+                href="/authentication" 
+                className="text-black hover:text-gray-700 text-xl w-full text-center py-2"
+                onClick={() => setIsMenuOpen(false)}
+              >
+                Login
               </Link>
             </div>
           </div>

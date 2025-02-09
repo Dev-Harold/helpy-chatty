@@ -1,10 +1,21 @@
 'use client'
 
 import Navbar from '@/components/Navbar'
+import Link from 'next/link'
 import { useState } from 'react'
 
 export default function AuthenticationPage() {
     const [isLogin, setIsLogin] = useState(true)
+    const [acceptTerms, setAcceptTerms] = useState(false)
+
+    const handleSubmit = (e: React.FormEvent) => {
+        e.preventDefault()
+        if (!isLogin && !acceptTerms) {
+            alert('Please accept the Terms and Conditions to continue')
+            return
+        }
+        // Handle form submission
+    }
 
     return (
         <>
@@ -27,7 +38,7 @@ export default function AuthenticationPage() {
 
                 <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
                     <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
-                        <form className="space-y-6">
+                        <form className="space-y-6" onSubmit={handleSubmit}>
                             {!isLogin && (
                                 <div>
                                     <label htmlFor="name" className="block text-sm font-medium text-gray-700">
@@ -76,6 +87,34 @@ export default function AuthenticationPage() {
                                     />
                                 </div>
                             </div>
+
+                            {!isLogin && (
+                                <div className="flex items-start">
+                                    <div className="flex items-center h-5">
+                                        <input
+                                            id="terms"
+                                            name="terms"
+                                            type="checkbox"
+                                            checked={acceptTerms}
+                                            onChange={(e) => setAcceptTerms(e.target.checked)}
+                                            className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded cursor-pointer"
+                                            required
+                                        />
+                                    </div>
+                                    <div className="ml-3 text-sm">
+                                        <label htmlFor="terms" className="text-gray-700 cursor-pointer">
+                                            By using this service, you accept our{' '}
+                                            <Link href="/terms" className="text-blue-600 hover:text-blue-500">
+                                                Terms of Service
+                                            </Link>
+                                            {' '}and{' '}
+                                            <Link href="/privacy" className="text-blue-600 hover:text-blue-500">
+                                                Privacy Policy
+                                            </Link>
+                                        </label>
+                                    </div>
+                                </div>
+                            )}
 
                             <div>
                                 <button

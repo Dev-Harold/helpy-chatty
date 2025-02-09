@@ -48,7 +48,7 @@ export default function TermsOfService() {
                         <section>
                             <h2 className="text-xl font-semibold mb-3">5. Limitation of Liability</h2>
                             <p className="text-gray-700">
-                                We provide the service "as is" without any warranty. We shall not be liable for any indirect, incidental, special, consequential, or punitive damages.
+                                We provide the service &quot;as is&quot; without any warranty. We shall not be liable for any indirect, incidental, special, consequential, or punitive damages.
                             </p>
                         </section>
 

@@ -26,6 +26,7 @@ const userId = 'test-user'
 const userName = 'Anakin Skywalker'
 const userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidGVzdC11c2VyIn0.M4BmkB9_r0VEl3MwkTEoCOhGFWqBabsQOFGu6VBzIaI'
 
+// This is temporary user data.
 const user: User = {
   id: userId,
   name: userName,

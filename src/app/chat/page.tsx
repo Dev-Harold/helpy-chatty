@@ -18,7 +18,10 @@ import { chatSent } from '../actions/AI'
 import "stream-chat-react/dist/css/v2/index.css"
 
 // Stream chat configuration
-const apiKey = 'saqx9aqwu678'
+const apiKey = process.env.NEXT_PUBLIC_GETSTREAM_APP_KEY as string
+if (!apiKey) {
+  throw new Error('GetStream API key not found. Please set NEXT_PUBLIC_GETSTREAM_APP_KEY in your environment variables.')
+}
 const userId = 'test-user'
 const userName = 'Anakin Skywalker'
 const userToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VyX2lkIjoidGVzdC11c2VyIn0.M4BmkB9_r0VEl3MwkTEoCOhGFWqBabsQOFGu6VBzIaI'

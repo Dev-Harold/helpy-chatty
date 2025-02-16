@@ -80,8 +80,11 @@ export default function ChatInterface() {
               <Window>
                 <MessageList />
                 <MessageInput 
-                  overrideSubmitHandler={(message, _channelCid) => {
-                    return handleMessage(message)
+                  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                  overrideSubmitHandler={async (message, _channelCid) => {
+                    if (message.text) {
+                      await handleMessage({ text: message.text })
+                    }
                   }}
                 />
               </Window>

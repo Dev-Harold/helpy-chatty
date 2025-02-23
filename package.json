@@ -15,7 +15,8 @@
     "react-dom": "^18.0.0",
     "react-icons": "^5.4.0",
     "stream-chat": "^8.49.0",
-    "stream-chat-react": "^12.8.1"
+    "stream-chat-react": "^12.8.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

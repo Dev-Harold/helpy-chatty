@@ -26,13 +26,13 @@ if (!apiKey) {
 
 let chatClient: StreamChat | null = null;
 
-const ChannelInner: React.FC = () => {
+const ChannelInner: React.FC<{ channelId: string }> = (props) => {
   const { sendMessage } = useChannelActionContext();
-  const overrideSubmitHandler = (message: MessageToSend, cid: string) => {
+  const overrideSubmitHandler = (message: MessageToSend) => {
     sendMessage(message);
     chatSent({
       messageId: message.id,
-      channelId: cid,
+      channelId: props.channelId,
       text: message.text,
       userId: ANON_USER_ID,
     });
@@ -119,7 +119,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
           <Chat client={chatClient}>
             <div className="flex h-full">
               <Channel channel={channel}>
-                <ChannelInner />
+                <ChannelInner channelId={id} />
                 <Thread />
               </Channel>
             </div>

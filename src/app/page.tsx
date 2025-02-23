@@ -3,6 +3,8 @@
 import Navbar from '@/components/Navbar'
 import Review from '@/components/Review'
 import { useState } from 'react'
+import { v4 as uuidv4 } from 'uuid'
+import { useRouter } from 'next/navigation'
 const reviews = [
   {
     image: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
@@ -27,6 +29,7 @@ type QuickAction = {
 }
 
 export default function Home() {
+  const router = useRouter()
   const [showReviews, setShowReviews] = useState(true)
   const [message, setMessage] = useState('')
 
@@ -42,7 +45,7 @@ export default function Home() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Message submitted:', message)
-    window.location.href = `/chat?message=${encodeURIComponent(message)}`
+    router.push(`/chat/${uuidv4()}`)
   }
 
   return (

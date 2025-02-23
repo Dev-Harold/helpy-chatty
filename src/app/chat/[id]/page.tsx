@@ -16,6 +16,7 @@ import {
 import { chatSent, getNewTokenAndEnsureChannelIsCreated } from '../../actions/AI'
 import "stream-chat-react/dist/css/v2/index.css"
 import { useEffect, useState } from 'react'
+import { CustomMessage } from '@/components/CustomMessage'
 
 const ANON_USER_ID = 'Helpy-Chatty-Anon-User';
 // Stream chat configuration
@@ -43,7 +44,7 @@ const ChannelInner: React.FC<{ channelId: string }> = (props) => {
     <>
       <Window>
         <ChannelHeader />
-        <MessageList />
+        <MessageList Message={CustomMessage} />
         <MessageInput overrideSubmitHandler={overrideSubmitHandler} />
       </Window>
       <Thread />

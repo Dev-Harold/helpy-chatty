@@ -2,7 +2,7 @@
 
 import { StreamChat } from "stream-chat"
 import Anthropic from '@anthropic-ai/sdk';
-import { MessageParam, TextBlock } from "@anthropic-ai/sdk/resources/index.mjs";
+import { MessageParam} from "@anthropic-ai/sdk/resources/index.mjs";
 type ChatMessage = {
   messageId: string | undefined
   channelId: string
@@ -39,13 +39,45 @@ export async function chatSent(message: ChatMessage) {
       messages: messageHistory,
       system:"You are a tech support agent for senior citizens. You are helpful and friendly and never give advice that could result in harm.",
       max_tokens: 1024,
+      stream: true,
     });
-    const content = response.content[0] as TextBlock;
-    console.log(content);
-    await channel.sendMessage({
-      text: content.text || "",
+    const initialMessage = await channel.sendMessage({
+      text: "...",
       user_id: BOT_USER_ID,
     });
+
+    let fullResponse = '';
+    
+    for await (const chunk of response) {
+      switch (chunk.type) {
+        case 'message_start':
+          console.log('Message started');
+          break;
+        case 'content_block_start':
+          console.log('Content block started');
+          break;
+        case 'content_block_delta':
+          if(chunk.delta.type === 'text_delta') {
+            fullResponse += chunk.delta.text;
+            await streamClient.partialUpdateMessage(initialMessage.message.id, 
+              {
+                set: {text: fullResponse},
+              },
+              BOT_USER_ID,
+            );
+          }
+          break;
+        case 'content_block_stop':
+          console.log('Content block ended');
+          break;
+        case 'message_delta':
+          console.log('Message metadata updated:', chunk.delta);
+          break;
+        case 'message_stop':
+          console.log('Message completed');
+          break;
+      }
+    }
     return { success: true };
   } catch (error) {
     console.error('Error logging message:', error)

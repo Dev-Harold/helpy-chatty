@@ -3,6 +3,7 @@
 import { StreamChat } from "stream-chat"
 import Anthropic from '@anthropic-ai/sdk';
 import { MessageParam} from "@anthropic-ai/sdk/resources/index.mjs";
+import { BOT_USER_ID, ANON_USER_ID } from "@/types/constants";
 type ChatMessage = {
   messageId: string | undefined
   channelId: string
@@ -35,7 +36,7 @@ export async function chatSent(message: ChatMessage) {
       messageHistory.push({ role: message.user?.id === BOT_USER_ID ? 'assistant' : 'user', content: message.text || "" });
     }
     const response = await anthropic.messages.create({
-      model: "claude-3-5-haiku-latest",
+      model: "claude-3-7-sonnet-latest",
       messages: messageHistory,
       system:"You are a tech support agent for senior citizens. You are helpful and friendly and never give advice that could result in harm.",
       max_tokens: 1024,
@@ -44,6 +45,7 @@ export async function chatSent(message: ChatMessage) {
     const initialMessage = await channel.sendMessage({
       text: "...",
       user_id: BOT_USER_ID,
+      is_ai_generated: true,
     });
 
     let fullResponse = '';
@@ -84,9 +86,6 @@ export async function chatSent(message: ChatMessage) {
     return { success: false, error };
   }
 }
-
-const ANON_USER_ID = 'Helpy-Chatty-Anon-User';
-const BOT_USER_ID = 'Helpy-Chatty-Bot';
 
 export async function getNewTokenAndEnsureChannelIsCreated(channelId: string) {
   const apiKey = process.env.NEXT_PUBLIC_GETSTREAM_APP_KEY!;

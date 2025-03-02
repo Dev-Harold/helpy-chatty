@@ -1,17 +1,15 @@
 'use client'
 import Navbar from '@/components/Navbar'
 import { StreamChat } from 'stream-chat'
-import type { Channel as StreamChannel } from 'stream-chat'
+import type { DefaultGenerics, Channel as StreamChannel } from 'stream-chat'
 import {
   Chat,
   Channel,
   Window,
   MessageList,
   MessageInput,
-  Thread,
   ChannelHeader,
   MessageToSend,
-  useChannelActionContext,
 } from "stream-chat-react"
 import { chatSent, getNewTokenAndEnsureChannelIsCreated } from '../../actions/AI'
 import "stream-chat-react/dist/css/v2/index.css"
@@ -26,31 +24,6 @@ if (!apiKey) {
 }
 
 let chatClient: StreamChat | null = null;
-
-const ChannelInner: React.FC<{ channelId: string }> = (props) => {
-  const { sendMessage } = useChannelActionContext();
-  const overrideSubmitHandler = (message: MessageToSend) => {
-    sendMessage(message);
-    chatSent({
-      messageId: message.id,
-      channelId: props.channelId,
-      text: message.text,
-      userId: ANON_USER_ID,
-    });
-  };
-
-
-  return (
-    <>
-      <Window>
-        <ChannelHeader />
-        <MessageList Message={CustomMessage} />
-        <MessageInput overrideSubmitHandler={overrideSubmitHandler} />
-      </Window>
-      <Thread />
-    </>
-  );
-};
 
 export default function ChatPage(props: { params: Promise<{ id: string }> }) {
   const[id, setId] = useState<string |null>(null);
@@ -110,7 +83,19 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
   if (!id || !channel) {
     return <div>Loading chat client...</div>;
   }
-
+  const overrideSubmitHandler = (message: MessageToSend<DefaultGenerics>) => {
+    const messageToSend = {
+      ...message,
+      mentioned_users: message.mentioned_users?.map(user => user.id)
+    };
+    channel.sendMessage(messageToSend);
+    chatSent({
+      messageId: message.id,
+      channelId: id,
+      text: message.text,
+      userId: ANON_USER_ID,
+    });
+  };
  
   return (
     <>
@@ -120,8 +105,11 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
           <Chat client={chatClient}>
             <div className="flex h-full">
               <Channel channel={channel}>
-                <ChannelInner channelId={id} />
-                <Thread />
+              <Window>
+        <ChannelHeader />
+        <MessageList Message={CustomMessage} />
+        <MessageInput overrideSubmitHandler={overrideSubmitHandler} />
+         </Window>
               </Channel>
             </div>
           </Chat>

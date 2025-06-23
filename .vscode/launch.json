@@ -23,6 +23,19 @@
         "uriFormat": "%s",
         "action": "debugWithChrome"
       }
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Test Script",
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
+      "program": "${workspaceFolder}/src/scripts/test.js",
+      "outFiles": [
+        "${workspaceFolder}/**/*.js"
+      ],
+      "console": "integratedTerminal"
     }
   ]
 } 

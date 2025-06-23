@@ -1,6 +1,6 @@
 'use server'
 
-import { Message, StreamChat } from "stream-chat"
+import { StreamChat } from "stream-chat"
 import Anthropic from '@anthropic-ai/sdk';
 import { MessageParam} from "@anthropic-ai/sdk/resources/index.mjs";
 import { BOT_USER_ID, ANON_USER_ID } from "@/types/constants";
@@ -32,8 +32,8 @@ export async function chatSent(message: ChatMessage, state: State) {
     if (!apiKey || !apiSecret) {
       throw new Error('GetStream API key or secret not found');
     }
-    const streamClient = StreamChat.getInstance(apiKey, apiSecret);
-    const channel = streamClient.channel('messaging', message.channelId);
+    // const streamClient = StreamChat.getInstance(apiKey, apiSecret);
+    // const channel = streamClient.channel('messaging', message.channelId);
     return chatSentStepByStep(message, state);
   }
 }
@@ -269,7 +269,7 @@ async function chatSentStepByStep(message: ChatMessage, state: State) {
     });
   console.log(jsonResponse.content[0], state);
   if(jsonResponse.content[0].input.fitsUserIssue) {
-    const initialMessage = await channel.sendMessage({
+    await channel.sendMessage({
       text: "Look at the right for a step by step guide.",
     user_id: BOT_USER_ID,  
       is_ai_generated: true,

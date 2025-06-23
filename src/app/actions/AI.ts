@@ -37,7 +37,7 @@ export async function chatSent(message: ChatMessage, state: State) {
     return chatSentStepByStep(message, state);
   }
 }
-async function chatSentReconnaissance(message: ChatMessage, state: State) {
+async function chatSentReconnaissance(message: ChatMessage, state: State): Promise<{success: boolean, state: State}> {
   try {
     // Log the message details server-side
     const apiKey = process.env.NEXT_PUBLIC_GETSTREAM_APP_KEY!;
@@ -192,10 +192,10 @@ async function chatSentReconnaissance(message: ChatMessage, state: State) {
   //   console.error('Error logging message:', error)
   //   return { success: false, error };
   // }
-  return { success: true };
+  return { success: true, state: newState };
 } catch (error) {
   console.error('Error logging message:', error)
-  return { success: false, error };
+  return { success: false, state: state };
 }
 }
 async function chatSentStepByStep(message: ChatMessage, state: State) {
@@ -296,6 +296,10 @@ async function chatSentStepByStep(message: ChatMessage, state: State) {
         version: state.issue.version,
         description: state.issue.description
       },
+      stepGuide: {
+        steps: [],
+        currentStep: 0,
+      }
     }
     return chatSentReconnaissance(message, newState);
   }

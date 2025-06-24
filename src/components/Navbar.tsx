@@ -7,7 +7,7 @@ export default function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   return (
-    <nav className="navigation-bar h-[30px] w-full bg-gradient-to-r from-blue-600 to-blue-800 fixed top-0 left-0 z-50">
+    <nav className="navigation-bar h-[30px] w-full bg-gradient-to-r from-blue-600 to-blue-800 z-50">
       <div className="flex items-center justify-between h-full px-4">
         <Link href="/" className="logo-icon flex items-center">
           <span className="text-2xl">💻</span>

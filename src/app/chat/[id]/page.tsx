@@ -29,6 +29,7 @@ let chatClient: StreamChat | null = null;
 export default function ChatPage(props: { params: Promise<{ id: string }> }) {
   const[id, setId] = useState<string |null>(null);
   const[channel, setChannel] = useState<StreamChannel | null>(null);
+  const[showStepsOverlay, setShowStepsOverlay] = useState(false);
   const[state, setState] = useState<State>({
     stage: "reconnaissance",
     issue: {
@@ -92,6 +93,13 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
       }
     }
   }, []); // Empty dependency array means this only runs on mount/unmount
+
+  // Auto-show steps overlay when step-by-step mode is activated
+  useEffect(() => {
+    if (state.stepGuide.steps.length > 0) {
+      setShowStepsOverlay(true);
+    }
+  }, [state]);
   
 
   if (!id || !channel) {
@@ -116,31 +124,66 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
   };
  
   return (
-    <>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <main className="pt-[30px] px-4 min-h-screen bg-gray-100">
-        <div className="max-w-7xl mx-auto h-[80vh] flex gap-4">
-          {/* Chat Section - Now on the left */}
-          <div className="flex-1 bg-white rounded-lg shadow-lg overflow-hidden">
+      <main className="p-4 bg-gray-100 flex flex-grow">
+        <div className="max-w-7xl mx-auto w-full flex flex-col custom-breakpoint:flex-row gap-4 flex-grow">
+          {/* Chat Section */}
+          <div className="flex-1 bg-white rounded-lg shadow-lg overflow-hidden relative min-h-0">
+            {/* Mobile Steps Toggle Button - Only visible on mobile */}
+            {state.stage === "step-by-step" && state.stepGuide.steps.length > 0 && (
+              <button
+                onClick={() => setShowStepsOverlay(!showStepsOverlay)}
+                className="custom-breakpoint:hidden absolute top-4 right-4 z-10 bg-blue-500 text-white px-3 py-2 rounded-lg text-sm font-medium hover:bg-blue-600 transition-colors"
+              >
+                {showStepsOverlay ? 'Hide Steps' : 'Show Steps'}
+              </button>
+            )}
+            
             <Chat client={chatClient}>
               <div className="flex h-full">
                 <Channel channel={channel}>
                 <Window>
           <ChannelHeader />
           <MessageList Message={CustomMessage} />
-          <MessageInput overrideSubmitHandler={overrideSubmitHandler} />
+          <MessageInput grow overrideSubmitHandler={overrideSubmitHandler} />
            </Window>
                 </Channel>
               </div>
             </Chat>
           </div>
           
-          {/* Steps Section - Now on the right */}
-          <div className="w-80 flex-shrink-0">
-            <Steps state={state} />
-          </div>
+          {/* Steps Section - Responsive Layout */}
+          {state.stage === "step-by-step" && state.stepGuide.steps.length > 0 && (
+            <>
+              {/* Mobile Overlay */}
+              <div className={`custom-breakpoint:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
+                showStepsOverlay ? 'opacity-100' : 'opacity-0 pointer-events-none'
+              }`}>
+                <div className="absolute inset-4 bg-white rounded-lg shadow-xl overflow-hidden">
+                  <div className="flex justify-between items-center p-4 border-b">
+                    <h2 className="text-lg font-semibold text-gray-800">Step Guide</h2>
+                    <button
+                      onClick={() => setShowStepsOverlay(false)}
+                      className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-500 text-white hover:bg-blue-600"
+                    >
+                      Return to Chat
+                    </button>
+                  </div>
+                  <div className="h-[calc(100%-4rem)] overflow-y-auto">
+                    <Steps state={state} />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Desktop Sidebar */}
+              <div className="hidden custom-breakpoint:block w-80 flex-shrink-0 bg-white rounded-lg shadow-lg overflow-hidden">
+                <Steps state={state} />
+              </div>
+            </>
+          )}
         </div>
       </main>
-    </>
+    </div>
   )
 }

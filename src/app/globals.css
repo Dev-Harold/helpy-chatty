@@ -87,3 +87,33 @@ nav * {
     align-items: flex-start;  /* This will align text to top */
     gap: 1rem;
 }
+
+/* Stream Chat Custom Styling Overrides */
+/* Override the default channel width to be 100% */
+.str-chat__channel {
+  width: 100% !important;
+}
+
+/* Ensure the channel container takes full width */
+.str-chat__channel-container {
+  width: 100% !important;
+}
+
+/* Override any max-width constraints that might be applied */
+.str-chat__channel .str-chat__channel-container {
+  max-width: none !important;
+  width: 100% !important;
+}
+
+/* Ensure the channel header, message list, and input all take full width */
+.str-chat__channel .str-chat__channel-header {
+  width: 100% !important;
+}
+
+.str-chat__channel .str-chat__message-list {
+  width: 100% !important;
+}
+
+.str-chat__channel .str-chat__input-flat {
+  width: 100% !important;
+}

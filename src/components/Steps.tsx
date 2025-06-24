@@ -52,8 +52,8 @@ export default function Steps({ state }: StepsProps) {
             </div>
 
             {/* Step Progress Indicator */}
-            <div className="flex items-center justify-between mb-4">
-                <span className="text-sm text-gray-600">
+            <div className="flex flex-col items-center mb-4">
+                <span className="text-xl font-semibold text-gray-600 text-center mb-2">
                     Step {currentStepIndex + 1} of {steps.length}
                 </span>
                 <div className="flex space-x-1">
@@ -73,23 +73,23 @@ export default function Steps({ state }: StepsProps) {
             </div>
 
             {/* Current Step */}
-            <div className="p-4 rounded-lg border border-gray-200 bg-gray-50 mb-4">
+            <div className="p-4 rounded-lg bg-gray-50 mb-4">
                 {/* Step Content */}
                 <div className="flex-1">
-                    <p className="text-sm leading-relaxed text-gray-700">
+                    <p className="text-lg leading-relaxed text-gray-700 text-center">
                         {cleanStepText(currentStep)}
                     </p>
                 </div>
             </div>
 
             {/* Navigation Buttons */}
-            <div className="flex justify-between gap-4">
+            <div className="flex justify-center gap-4">
                 <button
                     onClick={goToPreviousStep}
                     disabled={isFirstStep}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                         isFirstStep
-                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            ? 'bg-blue-100 text-blue-400 cursor-not-allowed opacity-80'
                             : 'bg-blue-500 text-white hover:bg-blue-600'
                     }`}
                 >
@@ -101,7 +101,7 @@ export default function Steps({ state }: StepsProps) {
                     disabled={isLastStep}
                     className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
                         isLastStep
-                            ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                            ? 'bg-blue-100 text-blue-400 cursor-not-allowed opacity-80'
                             : 'bg-blue-500 text-white hover:bg-blue-600'
                     }`}
                 >

@@ -1,28 +1,12 @@
 'use client'
 
 import Navbar from '@/components/Navbar'
-import Review from '@/components/Review'
+import Footer from '@/components/Footer'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/navigation'
-const reviews = [
-  {
-    image: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    message: "Good Site",
-    author: "Harold Richards"
-  },
-  {
-    image: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png",
-    message: "Awesome Site",
-    author: "Phillipe"
-  },
-  {
-    image: "https://mysterymtg.com/cdn/shop/files/f15c8803-f33a-4530-9882-bff1bf810c19_800x.jpg?v=1724909693",
-    message: "Doggo :D",
-    author: "Yoshimaru"
-  }
+import Image from 'next/image'
   
-]
 type QuickAction = {
   short: string;
   long: string;
@@ -30,36 +14,58 @@ type QuickAction = {
 
 export default function Home() {
   const router = useRouter()
-  const [showReviews, setShowReviews] = useState(true)
   const [message, setMessage] = useState('')
 
   const quickActions: QuickAction[] = [
     { short: "Computer won't start.", long: "My computer won't start. Can you help?" },
-    { short: "Printer not working.", long: "My Printer is not working. How can I fix this?" },
-    { short: "Email problems.", long: "I am having problems with my Email. Can you help?" },
-    { short: "Software installation help.", long: "How can I download Software?" },
-    { short: "Computer running slow.", long: "My Computer running slow and lagging. Can you help?" },
-    { short: "Forgot my password.", long: "I forgot my password. How can I reset it?" }
+    { short: "Printer not working.", long: "My printer is not working. How can I fix this?" },
+    { short: "Sending an email.", long: "I am having problems with sending an email. Can you help?" },
+    { short: "Software installation help.", long: "How can I download software?" },
+    { short: "Computer running slow.", long: "My computer is running slow and lagging. Can you help?" },
+    { short: "Forgot my password.", long: "I forgot my password. How can I reset it?" },
+    { short: "Texting on phone.", long: "I am having problems with texting on my phone. Can you help?" },
+    { short: "Taking photos with a phone.", long: "I am having problems with taking photos with my phone. Can you help?" },
   ]
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
     console.log('Message submitted:', message)
-    router.push(`/chat/${uuidv4()}`)
+    const chatId = uuidv4()
+    const encodedMessage = encodeURIComponent(message)
+    router.push(`/chat/${chatId}?message=${encodedMessage}`)
   }
 
   return (
     <>
       <Navbar />
+      
       <main className="pt-[30px] px-4 min-h-screen bg-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-lg shadow-lg p-6 mb-4">
-            <div className="text-2xl font-bold text-gray-900 text-center">
-              Something not working? Need help with a tech problem? Get Live Help Now! ⬇
+            <div className="flex flex-col lg:flex-row items-center justify-between min-h-[500px]">
+              <div className="text-center flex-1 mb-6 lg:mb-0">
+                <h2 className="text-4xl font-bold text-gray-800 mb-2">Quick, Easy, & Free Tech Support.</h2>
+                <br />
+                <br />
+                <br />
+                <h2 className="text-4xl font-bold text-gray-800 mb-2">Online assistance for ANY of your electronics.</h2>
+              </div>
+              <div className="image-container block flex-shrink-0 lg:ml-6 m-1">
+                <Image 
+                  src="/Electronics.jpeg" 
+                  alt="Tech Support" 
+                  width={750}
+                  height={750}
+                  className="rounded-lg"
+                />
+              </div>
             </div>
           </div>
 
+
           <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6">
+            <h2 className="text-2xl text-gray-800 mb-2 text-center underline" style={{ fontSize: '2.5rem' }}>Get Started</h2>
+            <br />
             <div className="relative">
               <input
                 type="text"
@@ -79,14 +85,14 @@ export default function Home() {
             </div>
             
             <div className="mt-4">
-              <p className="text-sm text-gray-600 mb-2">Click a prompt below to help you get started:</p>
-              <div className="flex flex-wrap gap-2">
+              <h1 className="text-2xl text-gray-800 mb-2 text-center underline"  style={{ fontSize: '1.5rem' }}>Or choose from a common problem:</h1>
+              <div className="flex flex-wrap gap-2 border-2 border-gray-300 rounded-lg p-4">
                 {quickActions.map((action) => (
                   <button
                     key={action.short}
                     type="button"
                     onClick={() => setMessage(action.long)}
-                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-sm transition-colors"
+                    className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-base transition-colors"
                   >
                     {action.short}
                   </button>
@@ -94,26 +100,16 @@ export default function Home() {
               </div>
             </div>
           </form>
-          
-          <button 
-            onClick={() => setShowReviews(!showReviews)}
-            className="mt-8 px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 transition-colors"
-          >
-            {showReviews ? 'Hide Reviews' : 'Show Reviews'}
-          </button>
-
-          {showReviews && (
-            <div className="flex flex-wrap gap-4 justify-center mt-8">
-              {reviews.map((review) => (
-                <div key={review.author} className="flex-1 min-w-[300px] max-w-[500px]">
-                  <Review {...review} />
-                </div>
-              ))}
-            </div>
-          )}
-          <p>Will this line move?</p>
         </div>
       </main>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <Footer />
     </>
   )
 }

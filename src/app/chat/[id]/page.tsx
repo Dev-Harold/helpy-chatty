@@ -16,6 +16,7 @@ import "stream-chat-react/dist/css/v2/index.css"
 import { useEffect, useState } from 'react'
 import { CustomMessage } from '@/components/CustomMessage'
 import Steps from '@/components/Steps'
+import { useSearchParams } from 'next/navigation'
 
 const ANON_USER_ID = 'Helpy-Chatty-Anon-User';
 // Stream chat configuration
@@ -30,6 +31,8 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
   const[id, setId] = useState<string |null>(null);
   const[channel, setChannel] = useState<StreamChannel | null>(null);
   const[showStepsOverlay, setShowStepsOverlay] = useState(false);
+  const[initialMessageSent, setInitialMessageSent] = useState(false);
+  const searchParams = useSearchParams();
   const[state, setState] = useState<State>({
     stage: "reconnaissance",
     issue: {
@@ -72,6 +75,33 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
         const messageChannel = chatClient!.channel('messaging', id);
         await messageChannel.watch();
         setChannel(messageChannel);
+        
+        // Send initial message if provided in URL
+        const initialMessage = searchParams.get('message');
+        if (initialMessage && !initialMessageSent) {
+          const decodedMessage = decodeURIComponent(initialMessage);
+          console.log('Sending initial message:', decodedMessage);
+          
+          // Send the message through the channel
+          await messageChannel.sendMessage({
+            text: decodedMessage,
+            user_id: ANON_USER_ID,
+          });
+          
+          // Process the message through AI
+          const result = await chatSent({
+            messageId: undefined,
+            channelId: id,
+            text: decodedMessage,
+            userId: ANON_USER_ID,
+          }, state);
+          
+          if (result.success && 'state' in result && result.state) {
+            setState(result.state);
+          }
+          
+          setInitialMessageSent(true);
+        }
       } catch (error) {
         console.error('Error initializing chat:', error);
       }
@@ -79,7 +109,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
     if (!channel) {
       initializeChat();
     }
-  }, [id, channel]);
+  }, [id, channel, searchParams, initialMessageSent, state]);
 
   // Cleanup effect that only runs on unmount
   useEffect(() => {

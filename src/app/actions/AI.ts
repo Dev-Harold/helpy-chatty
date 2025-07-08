@@ -4,6 +4,21 @@ import { StreamChat } from "stream-chat"
 import Anthropic from '@anthropic-ai/sdk';
 import { MessageParam} from "@anthropic-ai/sdk/resources/index.mjs";
 import { BOT_USER_ID, ANON_USER_ID } from "@/types/constants";
+
+// Type definitions for Anthropic tool responses
+type ToolResponse = {
+  input: {
+    device?: string;
+    version?: string;
+    description?: string;
+    question?: string;
+    goToStepByStep?: boolean;
+    reason?: string;
+    fitsUserIssue?: boolean;
+    steps?: string[];
+  };
+};
+
 type ChatMessage = {
   messageId: string | undefined
   channelId: string
@@ -71,7 +86,7 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
       If you have enough information to provide a simple step-by-step solution to the user, you must set goToStepByStep to true.
       If you do not have enough information to provide a simple step-by-step solution to the user, you must set goToStepByStep to false.
       Never Repeat the same question to the user.
-
+      Never ask the user technical questions that the average elderly person would not know the answer to.
       Here is the conversation history:
       MESSAGE HISTORY:
       ${messagesHistoryAsString}
@@ -132,22 +147,22 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
   const newState: State = {
     stage: "reconnaissance",
     issue: {
-      device: jsonResponse.content[0].input.device,
-      version: jsonResponse.content[0].input.version,
-      description: jsonResponse.content[0].input.description
+      device: (jsonResponse.content[0] as ToolResponse).input.device || "unknown",
+      version: (jsonResponse.content[0] as ToolResponse).input.version || "unknown",
+      description: (jsonResponse.content[0] as ToolResponse).input.description || "unknown"
     },
     stepGuide: {
       steps: [],
       currentStep: 0,
     }
   }
-  if(jsonResponse.content[0].input.goToStepByStep) {
+  if((jsonResponse.content[0] as ToolResponse).input.goToStepByStep) {
     newState.stage = "step-by-step";
     return await chatSentStepByStep(message, newState);
   }
   else {
   console.log(jsonResponse.content[0], newState);
-    const response = jsonResponse.content[0].input.question;
+    const response = (jsonResponse.content[0] as ToolResponse).input.question || "";
     await streamClient.partialUpdateMessage(initialMessage.message.id, 
       {
         set: {text: response},
@@ -268,9 +283,9 @@ async function chatSentStepByStep(message: ChatMessage, state: State) {
       }]
     });
   console.log(jsonResponse.content[0], state);
-  if(jsonResponse.content[0].input.fitsUserIssue) {
+  if((jsonResponse.content[0] as ToolResponse).input.fitsUserIssue) {
     await channel.sendMessage({
-      text: "Look at the right for a step by step guide.",
+      text: "Look at the guide to solve your issue.",
     user_id: BOT_USER_ID,  
       is_ai_generated: true,
     });
@@ -282,7 +297,7 @@ async function chatSentStepByStep(message: ChatMessage, state: State) {
         description: state.issue.description
       },
       stepGuide: {
-        steps: jsonResponse.content[0].input.steps,
+        steps: (jsonResponse.content[0] as ToolResponse).input.steps || [],
         currentStep: 0,
       }
     }

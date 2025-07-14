@@ -2,7 +2,7 @@
 
 import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
-import { useState } from 'react'
+import { useState, useRef, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
@@ -15,6 +15,26 @@ type QuickAction = {
 export default function Home() {
   const router = useRouter()
   const [message, setMessage] = useState('')
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
+
+  // Auto-expand textarea up to 3 lines, then scroll
+  useEffect(() => {
+    if (textareaRef.current) {
+      const textarea = textareaRef.current
+      textarea.style.height = 'auto'
+      const computed = window.getComputedStyle(textarea)
+      let lineHeight = parseFloat(computed.lineHeight)
+      if (isNaN(lineHeight)) lineHeight = 28 // fallback for text-lg + leading-[28px]
+      const paddingTop = parseFloat(computed.paddingTop)
+      const paddingBottom = parseFloat(computed.paddingBottom)
+      const borderTop = parseFloat(computed.borderTopWidth)
+      const borderBottom = parseFloat(computed.borderBottomWidth)
+      const maxLines = 2
+      const maxHeight = lineHeight * maxLines + paddingTop + paddingBottom + borderTop + borderBottom
+      textarea.style.height = Math.min(textarea.scrollHeight, maxHeight) + 'px'
+      textarea.style.overflowY = textarea.scrollHeight > maxHeight ? 'auto' : 'hidden'
+    }
+  }, [message])
 
   const quickActions: QuickAction[] = [
     { short: "Computer won't start.", long: "My computer won't start. Can you help?" },
@@ -42,13 +62,10 @@ export default function Home() {
       <main className="pt-[30px] px-4 min-h-screen bg-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-lg shadow-lg p-6 mb-4">
-            <div className="flex flex-col lg:flex-row items-center justify-between min-h-[500px]">
+            <div className="flex flex-col lg:flex-row items-center justify-between">
               <div className="text-center flex-1 mb-6 lg:mb-0">
-                <h2 className="text-4xl font-bold text-gray-800 mb-2">Quick, Easy, & Free Tech Support.</h2>
-                <br />
-                <br />
-                <br />
-                <h2 className="text-4xl font-bold text-gray-800 mb-2">Online assistance for ANY of your electronics.</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2 md:text-4xl mb-8 md:mb-16">Quick, Easy, & Free Tech Support.</h2>
+                <h2 className="text-2xl font-bold text-gray-800 mb-2 md:text-4xl">Online assistance for ANY of your electronics.</h2>
               </div>
               <div className="image-container block flex-shrink-0 lg:ml-6 m-1">
                 <Image 
@@ -62,22 +79,21 @@ export default function Home() {
             </div>
           </div>
 
-
           <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6">
-            <h2 className="text-2xl text-gray-800 mb-2 text-center underline" style={{ fontSize: '2.5rem' }}>Get Started</h2>
-            <br />
-            <div className="relative">
-              <input
-                type="text"
+            <div className="flex flex-col md:flex-row gap-4">
+              <textarea
+                ref={textareaRef}
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
-                placeholder="Describe your problem..."
-                className="w-full p-3 pr-12 border-2 border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-lg"
+                placeholder="Describe your problem to get started..."
+                className="flex-1 w-full p-3 border-2 border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-sm md:text-lg resize-none leading-[28px]"
                 required
+                rows={1}
+                style={{ height: undefined }}
               />
               <button 
                 type="submit"
-                className="absolute right-2 top-1/2 -translate-y-1/2 bg-blue-500 hover:bg-blue-600 text-white p-2 rounded-full transition-colors"
+                className="md:w-auto w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-md transition-colors text-sm md:text-lg font-semibold whitespace-nowrap"
                 aria-label="Send message"
               >
                 Chat Now
@@ -85,7 +101,7 @@ export default function Home() {
             </div>
             
             <div className="mt-4">
-              <h1 className="text-2xl text-gray-800 mb-2 text-center underline"  style={{ fontSize: '1.5rem' }}>Or choose from a common problem:</h1>
+              <h1 className="text-lg italic  md:text-2xl text-gray-800 mb-2 text-center">Or choose from a common problem:</h1>
               <div className="flex flex-wrap gap-2 border-2 border-gray-300 rounded-lg p-4">
                 {quickActions.map((action) => (
                   <button

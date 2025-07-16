@@ -4,14 +4,16 @@ import Link from 'next/link'
 
 export default function Footer() {
   return (
-    <footer className="text-white" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-      <div className="max-w-7xl mx-auto px-4 py-12">
+    <footer className="text-white" style={{ backgroundColor: 'rgba(0, 0, 0, 0.5)', marginTop: '12px' }}>
+      <div className="max-w-7xl mx-auto p-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Section */}
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center mb-4">
-              <span className="text-3xl">💻</span>
-              <div className="text-white font-black text-2xl ml-3 font-bold">Helpy Chatty</div>
+              <div style={{ width: '50px', height: '50px', margin: '5px 0px' }}>
+                <img src="/smartphone-support-logo.svg" alt="TechHelp Logo" />
+              </div>
+              <div className="text-white font-black text-2xl ml-3 font-bold">TechHelp</div>
             </div>
             <p className="text-gray-300 mb-4 max-w-md">
               Your AI-powered support assistant that helps you get answers quickly and efficiently. 
@@ -36,25 +38,9 @@ export default function Footer() {
               <li>
                 <Link 
                   href="/terms" 
-                  className="text-gray-300 hover:text-white transition-colors"
+                  className="text-gray-300 hover:text-white underline transition-colors"
                 >
                   Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/chat" 
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
-                  Chat
-                </Link>
-              </li>
-              <li>
-                <Link 
-                  href="/" 
-                  className="text-gray-300 hover:text-white transition-colors"
-                >
-                  Home
                 </Link>
               </li>
             </ul>

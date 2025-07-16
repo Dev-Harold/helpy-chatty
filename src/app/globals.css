@@ -21,7 +21,7 @@ nav * {
   align-items: center;
   height: 100%;
   width: auto;
-  gap: 8px;
+  gap: 4px;
   margin-right: 2rem;
 }
 
@@ -95,6 +95,27 @@ nav * {
   width: 100% !important;
 }
 
+.str-chat__date-separator   {
+  display: none !important;
+}
+
+.str-chat__message-simple__actions {
+  display: none !important;
+}
+.str-chat__channel-header-info {
+  display: none !important;
+}
+
+.str-chat__message-simple-name {
+  display: none !important;
+}
+.str-chat__message-metadata {
+  display: none !important;
+}
+
+.str-chat__message-options {
+  display: none !important;
+}
 /* Ensure the channel container takes full width */
 .str-chat__channel-container {
   width: 100% !important;

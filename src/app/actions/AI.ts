@@ -351,7 +351,7 @@ export async function getNewTokenAndEnsureChannelIsCreated(channelId: string) {
       const channel = streamClient.channel('messaging', channelId, {
         members: [ANON_USER_ID, BOT_USER_ID],
         created_by_id: ANON_USER_ID,
-        name: 'Helping Channel',
+        name: 'Helping Chat',
       });
       await channel.create();
       console.log('New channel created:', channel.cid);

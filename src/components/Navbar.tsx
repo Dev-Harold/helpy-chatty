@@ -4,11 +4,13 @@ import Link from 'next/link'
 
 export default function Navbar() {
   return (
-    <nav className="navigation-bar h-[50px] w-full bg-gradient-to-r from-blue-600 to-blue-800 z-50">
+    <nav className="navigation-bar h-[50px] w-full bg-gradient-to-r from-blue-600 to-blue-800 z-50 max-w-7xl mx-auto">
       <div className="flex items-center justify-between h-full px-4">
         <Link href="/" className="logo-icon flex items-center">
-          <span className="text-2xl">💻</span>
-          <div className="text-black font-black text-2xl ml-3 font-bold">Helpy Chatty</div>
+          <div style={{ width: '50px', height: '50px', margin: '5px 0px' }}>
+            <img src="/smartphone-support-logo.svg" alt="TechHelp Logo" />
+          </div>
+          <div className="text-black font-black text-2xl font-bold">TechHelp</div>
         </Link>
 
         {/* Navigation Links */}

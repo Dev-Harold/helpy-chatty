@@ -82,8 +82,8 @@ export default function Home() {
           </div>
 
           <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6">
-            <div className="flex flex-col md:flex-row gap-4">
-              <div className="flex-1 w-full">
+            <div className="flex flex-col md:flex-row gap-4 items-center">
+              <div className="flex-1 w-full flex">
                 <textarea
                   ref={textareaRef}
                   value={message}
@@ -96,7 +96,7 @@ export default function Home() {
               </div>
               <button 
                 type="submit"
-                className="md:w-auto w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-md transition-colors text-sm md:text-lg font-semibold whitespace-nowrap"
+                className="md:w-auto w-full bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-md transition-colors text-sm md:text-lg font-semibold whitespace-nowrap h-full"
                 aria-label="Send message"
               >
                 Chat Now
@@ -105,7 +105,7 @@ export default function Home() {
             
             <div className="mt-4">
               <h1 className="text-lg italic  md:text-2xl text-gray-800 mb-2 text-center">Or choose from a common problem below:</h1>
-              <div className="flex flex-wrap gap-2 border-2 border-gray-300 rounded-lg p-4">
+              <div className="flex flex-wrap gap-2 border-2 border-gray-300 rounded-lg p-4 justify-center">
                 {quickActions.map((action) => (
                   <button
                     key={action.short}

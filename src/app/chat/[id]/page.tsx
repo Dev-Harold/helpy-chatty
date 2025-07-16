@@ -16,7 +16,7 @@ import "stream-chat-react/dist/css/v2/index.css"
 import { useEffect, useState } from 'react'
 import { CustomMessage } from '@/components/CustomMessage'
 import Steps from '@/components/Steps'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, usePathname } from 'next/navigation'
 
 const ANON_USER_ID = 'Helpy-Chatty-Anon-User';
 // Stream chat configuration
@@ -33,6 +33,8 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
   const[showStepsOverlay, setShowStepsOverlay] = useState(false);
   const[initialMessageSent, setInitialMessageSent] = useState(false);
   const searchParams = useSearchParams();
+
+  const pathname = usePathname();
   const[state, setState] = useState<State>({
     stage: "reconnaissance",
     issue: {
@@ -101,6 +103,12 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
           }
           
           setInitialMessageSent(true);
+          
+          // Update URL to remove the message parameter using history API
+          const newSearchParams = new URLSearchParams(searchParams.toString());
+          newSearchParams.delete('message');
+          const newUrl = newSearchParams.toString() ? `${pathname}?${newSearchParams.toString()}` : pathname;
+          window.history.replaceState({}, '', newUrl);
         }
       } catch (error) {
         console.error('Error initializing chat:', error);
@@ -109,7 +117,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
     if (!channel) {
       initializeChat();
     }
-  }, [id, channel, searchParams, initialMessageSent, state]);
+  }, [id, channel, initialMessageSent, state]);
 
   // Cleanup effect that only runs on unmount
   useEffect(() => {

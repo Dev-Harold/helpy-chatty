@@ -15,10 +15,6 @@ export default function Footer() {
               </div>
               <div className="text-white font-black text-2xl ml-3 font-bold">TechHelp</div>
             </div>
-            <p className="text-gray-300 mb-4 max-w-md">
-              Your AI-powered support assistant that helps you get answers quickly and efficiently. 
-              Get instant help with your questions and technical issues.
-            </p>
             <div className="flex space-x-4">
               <a 
                 href="mailto:support@helpychatty.com" 
@@ -33,17 +29,16 @@ export default function Footer() {
             </div>
           </div>
           {/* Quick Links */}
-          <div>
-            <ul className="space-y-2">
-              <li>
-                <Link 
-                  href="/terms" 
-                  className="text-gray-300 hover:text-white underline transition-colors"
-                >
-                  Terms of Service
-                </Link>
-              </li>
-            </ul>
+          <div className="flex flex-row items-end justify-between">
+            <div className="text-gray-300">© 2025 TechHelp. All rights reserved.</div>
+            <div className="flex items-center">
+            <Link 
+              href="/terms" 
+              className="text-gray-300 hover:text-white underline transition-colors ml-4"
+            >
+              Terms of Service
+            </Link>
+            </div>
           </div>
         </div>
       </div>

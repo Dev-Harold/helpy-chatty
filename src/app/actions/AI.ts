@@ -87,6 +87,7 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
       If you do not have enough information to provide a simple step-by-step solution to the user, you must set goToStepByStep to false.
       Never Repeat the same question to the user.
       Never ask the user technical questions that the average elderly person would not know the answer to.
+      
       Here is the conversation history:
       MESSAGE HISTORY:
       ${messagesHistoryAsString}
@@ -298,7 +299,7 @@ async function chatSentStepByStep(message: ChatMessage, state: State) {
       },
       stepGuide: {
         steps: (jsonResponse.content[0] as ToolResponse).input.steps || [],
-        currentStep: 0,
+        currentStep: 1,
       }
     }
   return {success:true, state: newState};
@@ -351,7 +352,7 @@ export async function getNewTokenAndEnsureChannelIsCreated(channelId: string) {
       const channel = streamClient.channel('messaging', channelId, {
         members: [ANON_USER_ID, BOT_USER_ID],
         created_by_id: ANON_USER_ID,
-        name: 'Helping Chat',
+        name: 'Helping Channel',
       });
       await channel.create();
       console.log('New channel created:', channel.cid);

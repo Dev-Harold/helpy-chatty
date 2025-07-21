@@ -57,6 +57,12 @@ export default function Home() {
     router.push(`/chat/${chatId}?message=${encodedMessage}`)
   }
 
+  const handleQuickAction = (action: QuickAction) => {
+    const chatId = uuidv4()
+    const encodedMessage = encodeURIComponent(action.long)
+    router.push(`/chat/${chatId}?message=${encodedMessage}`)
+  }
+
   return (
     <>
       <Navbar />
@@ -110,7 +116,7 @@ export default function Home() {
                   <button
                     key={action.short}
                     type="button"
-                    onClick={() => setMessage(action.long)}
+                    onClick={() => handleQuickAction(action)}
                     className="bg-gray-100 hover:bg-gray-200 text-gray-700 px-3 py-1 rounded-full text-base transition-colors"
                   >
                     {action.short}

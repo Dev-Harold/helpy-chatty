@@ -160,6 +160,8 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
       setState(result.state);
     }
   };
+
+  const showSteps = state.stage === "step-by-step" && state.stepGuide.steps.length > 0;
  
   return (
     <div className="flex flex-col min-h-screen">
@@ -192,7 +194,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
           </div>
           
           {/* Steps Section - Responsive Layout */}
-          {state.stage === "step-by-step" && state.stepGuide.steps.length > 0 && (
+          {showSteps && (
             <>
               {/* Mobile Overlay */}
               <div className={`custom-breakpoint:hidden fixed inset-0 bg-black bg-opacity-50 z-40 transition-opacity duration-300 ${
@@ -200,7 +202,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
               }`}>
                 <div className="absolute inset-4 bg-white rounded-lg shadow-xl overflow-hidden">
                   <div className="flex justify-between items-center p-4 border-b">
-                    <h2 className="text-lg font-semibold text-gray-800">Step Guide</h2>
+                    <h2 className="text-lg font-semibold text-gray-800">Step-by-step Guide</h2>
                     <button
                       onClick={() => setShowStepsOverlay(false)}
                       className="px-4 py-2 rounded-lg text-sm font-medium transition-colors bg-blue-500 text-white hover:bg-blue-600"
@@ -215,11 +217,20 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
               </div>
               
               {/* Desktop Sidebar */}
-              <div className="hidden custom-breakpoint:block w-80 flex-shrink-0 bg-white rounded-lg shadow-lg overflow-hidden">
+              <div className="hidden custom-breakpoint:block w-80 flex-shrink-0 bg-white rounded-lg shadow-lg overflow-hidden pt-4">
+              <h2 className="text-xl font-semibold text-gray-800 text-center">Step-by-step Guide</h2>
+              <p className="text-gray-600 mt-4 text-lg text-center mb-8">Please follow the steps below</p>
                 <Steps state={state} />
               </div>
             </>
           )}
+          {
+            !showSteps && (
+              <div className="hidden custom-breakpoint:block w-80 flex-shrink-0 bg-white rounded-lg shadow-lg overflow-hidden pt-4">
+              <h2 className="text-xl font-semibold text-gray-800 text-center">Step-by-step Guide</h2>
+              <p className="text-gray-600 mt-4 text-lg text-center">Your step-by-step guide will appear here after a few questions</p>
+            </div>
+            )}
         </div>
       </main>
     </div>

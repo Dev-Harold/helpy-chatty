@@ -40,16 +40,6 @@ export default function Steps({ state }: StepsProps) {
 
     return (
         <div className="bg-white rounded-lg shadow-md p-4 h-full overflow-y-auto">
-            
-            {/* Issue Summary */}
-            <div className="bg-blue-50 rounded-lg p-3 mb-4">
-                <h1 className="font-semibold text-blue-800 mb-2 text-lg">Issue Summary</h1>
-                <div className="text-xs text-blue-700 space-y-1">
-                    <p><strong>Device:</strong> {state.issue.device}</p>
-                    <p><strong>Version:</strong> {state.issue.version}</p>
-                    <p><strong>Description:</strong> {state.issue.description}</p>
-                </div>
-            </div>
 
             {/* Step Progress Indicator */}
             <div className="flex flex-col items-center mb-4">

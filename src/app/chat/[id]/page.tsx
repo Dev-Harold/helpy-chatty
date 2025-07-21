@@ -19,6 +19,67 @@ import Steps from '@/components/Steps'
 import { useSearchParams, usePathname } from 'next/navigation'
 
 const ANON_USER_ID = 'Helpy-Chatty-Anon-User';
+
+// LocalStorage utility functions
+const getStateKey = (channelId: string) => `helpy_chatty_state_${channelId}`;
+
+const saveChatState = (channelId: string, state: State) => {
+  try {
+    const stateKey = getStateKey(channelId);
+    const stateData = {
+      ...state,
+      lastUpdated: Date.now()
+    };
+    localStorage.setItem(stateKey, JSON.stringify(stateData));
+    console.log('State saved to localStorage:', stateData);
+  } catch (error) {
+    console.error('Failed to save state to localStorage:', error);
+  }
+};
+
+const loadChatState = (channelId: string): State | null => {
+  try {
+    const stateKey = getStateKey(channelId);
+    const savedState = localStorage.getItem(stateKey);
+    if (savedState) {
+      const parsedState = JSON.parse(savedState);
+      console.log('State loaded from localStorage:', parsedState);
+      return parsedState;
+    }
+  } catch (error) {
+    console.error('Failed to load state from localStorage:', error);
+  }
+  return null;
+};
+
+// Utility function to clear state (for future use)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const clearChatState = (channelId: string) => {
+  try {
+    const stateKey = getStateKey(channelId);
+    localStorage.removeItem(stateKey);
+    console.log('State cleared from localStorage for channel:', channelId);
+  } catch (error) {
+    console.error('Failed to clear state from localStorage:', error);
+  }
+};
+
+
+
+// Default state
+const getDefaultState = (): State => ({
+  stage: "reconnaissance",
+  issue: {
+    device: "Unknown",
+    version: "Unknown",
+    description: "Unknown"
+  },
+  stepGuide: {
+    steps: [],
+    currentStep: 0,
+  }
+});
+
 // Stream chat configuration
 const apiKey = process.env.NEXT_PUBLIC_GETSTREAM_APP_KEY as string
 if (!apiKey) {
@@ -32,25 +93,41 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
   const[channel, setChannel] = useState<StreamChannel | null>(null);
   const[showStepsOverlay, setShowStepsOverlay] = useState(false);
   const[initialMessageSent, setInitialMessageSent] = useState(false);
+  const[isLoadingState, setIsLoadingState] = useState(true);
   const searchParams = useSearchParams();
 
   const pathname = usePathname();
-  const[state, setState] = useState<State>({
-    stage: "reconnaissance",
-    issue: {
-      device: "Unknown",
-      version: "Unknown",
-      description: "Unknown"
-    },
-    stepGuide: {
-      steps: [],
-      currentStep: 0,
-    }
-  });
+  const[state, setState] = useState<State>(getDefaultState());
 
   if (!chatClient) {
     chatClient = StreamChat.getInstance(apiKey);
   }
+
+  // Load state from localStorage when component mounts
+  useEffect(() => {
+    const loadState = async () => {
+      const resolvedParams = await props.params;
+      const channelId = resolvedParams.id;
+      
+      const savedState = loadChatState(channelId);
+      if (savedState) {
+        setState(savedState);
+        console.log('Restored state from localStorage:', savedState);
+      } else {
+        console.log('No saved state found, using default state');
+      }
+      setIsLoadingState(false);
+    };
+    
+    loadState();
+  }, [props.params]);
+
+  // Save state to localStorage whenever it changes
+  useEffect(() => {
+    if (id && !isLoadingState) {
+      saveChatState(id, state);
+    }
+  }, [state, id, isLoadingState]);
 
   useEffect(() => {
     // Resolve the promise and set the id
@@ -140,7 +217,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
   }, [state]);
   
 
-  if (!id || !channel) {
+  if (!id || !channel || isLoadingState) {
     return <div>Loading chat client...</div>;
   }
   const overrideSubmitHandler = async (message: MessageToSend<DefaultGenerics>) => {

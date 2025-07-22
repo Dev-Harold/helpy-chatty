@@ -1,6 +1,6 @@
 'use client'
 import { State } from "@/app/actions/AI";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 interface StepsProps {
     state: State;
@@ -10,6 +10,14 @@ export default function Steps({ state }: StepsProps) {
     const { stepGuide } = state;
     const { steps } = stepGuide;
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
+
+    // Reset to first step whenever steps change
+    useEffect(() => {
+        // Ensure currentStepIndex is within valid range
+        if (steps.length > 0) {
+            setCurrentStepIndex(0);
+        }
+    }, [steps]);
 
     // Don't render if we're not in step-by-step mode or if there are no steps
     if (state.stage !== "step-by-step" || steps.length === 0) {

@@ -34,7 +34,7 @@ export default function Footer() {
             <div className="flex items-center">
             <Link 
               href="/terms" 
-              className="text-gray-300 hover:text-white underline transition-colors ml-4"
+              className="text-gray-300 hover:text-white border-b border-gray-300 hover:border-white transition-all duration-200 ml-4 pb-px"
             >
               Terms of Service
             </Link>

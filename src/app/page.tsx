@@ -4,6 +4,7 @@ import Navbar from '@/components/Navbar'
 import Footer from '@/components/Footer'
 import { useState, useRef, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { motion } from 'motion/react'
 import { useRouter } from 'next/navigation'
 import Image from 'next/image'
   
@@ -69,13 +70,23 @@ export default function Home() {
       <main className="pt-[30px] px-4 min-h-screen bg-gray-100">
         <div className="max-w-7xl mx-auto">
           <div className="bg-white rounded-lg shadow-lg mb-4 flex flex-col lg:flex-row items-center justify-center overflow-hidden">
-            <div className="text-center flex-1 min-h-[300px] md:min-h-[500px] bg-cover bg-center bg-no-repeat relative flex items-center" style={{ backgroundImage: 'url(/Electronics.jpeg)' }}>
-             <div className="absolute inset-0 bg-black/70 md:bg-black/0 md:bg-gradient-to-r md:from-black md:via-black/70 md:to-transparent"></div>
-             <div className="relative z-10 p-6 md:max-w-[50%] flex flex-col items-center justify-center">
-              <h2 className="text-2xl font-bold text-white mb-2 md:text-4xl mb-8 md:mb-16">Quick, Easy, & Free Tech Support.</h2>
-              <h2 className="text-2xl font-bold text-white mb-2 md:text-4xl">Online assistance for ANY of your devices.</h2>
+                         <div className="text-center flex-1 min-h-[300px] md:min-h-[500px] bg-cover bg-center bg-no-repeat relative flex items-center" style={{ backgroundImage: 'url(/Electronics.jpeg)' }}>
+              <motion.div 
+                className="absolute inset-0 bg-black/70 md:bg-black/0 md:bg-gradient-to-r md:from-black md:via-black/70 md:to-transparent"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.3 }}
+              ></motion.div>
+              <motion.div 
+                className="relative z-10 p-6 md:max-w-[50%] flex flex-col items-center justify-center"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+              >
+                <h2 className="text-2xl font-bold text-white mb-2 md:text-4xl mb-8 md:mb-16">Quick, Easy, & Free Tech Support.</h2>
+                <h2 className="text-2xl font-bold text-white mb-2 md:text-4xl">Online assistance for ANY of your devices.</h2>
+              </motion.div>
             </div>
-          </div>
           <div className="flex flex-col gap-4 items-center min-w-[40%] p-6">
             <h1 className="text-lg italic  md:text-2xl text-gray-800 mb-2 text-center">Describe your problem to get started:</h1>
             <div className="flex-1 w-full flex">

@@ -246,7 +246,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
       <main className="p-4 bg-gray-100 flex flex-grow">
         <div className="max-w-7xl mx-auto w-full flex flex-col custom-breakpoint:flex-row gap-4 flex-grow">
           {/* Chat Section */}
-          <div className="flex-1 bg-white rounded-lg shadow-lg overflow-hidden relative min-h-0">
+          <div className="h-full w-full custom-breakpoint:w-1/2 bg-white rounded-lg shadow-lg overflow-hidden relative min-h-0">
             {/* Mobile Steps Toggle Button - Only visible on mobile */}
             {state.stage === "step-by-step" && state.stepGuide.steps.length > 0 && (
               <button
@@ -294,7 +294,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
               </div>
               
               {/* Desktop Sidebar */}
-              <div className="hidden custom-breakpoint:block w-80 flex-shrink-0 bg-white rounded-lg shadow-lg overflow-hidden pt-4">
+              <div className="hidden custom-breakpoint:block w-1/2 bg-white rounded-lg shadow-lg overflow-hidden pt-4">
               <h2 className="text-xl font-semibold text-gray-800 text-center">Step-by-step Guide</h2>
               <p className="text-gray-600 mt-4 text-lg text-center mb-8">Please follow the steps below</p>
                 <Steps state={state} />
@@ -303,7 +303,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
           )}
           {
             !showSteps && (
-              <div className="hidden custom-breakpoint:block w-80 flex-shrink-0 bg-white rounded-lg shadow-lg overflow-hidden pt-4">
+              <div className="hidden custom-breakpoint:block w-1/2 bg-white rounded-lg shadow-lg overflow-hidden pt-4">
               <h2 className="text-xl font-semibold text-gray-800 text-center">Step-by-step Guide</h2>
               <p className="text-gray-600 mt-4 text-lg text-center">Your step-by-step guide will appear here after a few questions</p>
             </div>

@@ -123,7 +123,7 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
             },
             question: {
               type: "string",
-              description: "The next question to ask the user to help you understand the issue and get more information"
+              description: "The next question to ask the user to help you understand the issue and get more information. If you have enough information to provide a simple step-by-step solution to the user and make goToStepByStep true, return something along the lines of 'Great! I have enough information to help you step by step. Let me prepare a guide for you.'"
             },
             goToStepByStep: {
               type: "boolean",
@@ -159,6 +159,13 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
   }
   if((jsonResponse.content[0] as ToolResponse).input.goToStepByStep) {
     newState.stage = "step-by-step";
+    // Update the initial placeholder message to indicate we're transitioning to step-by-step
+    await streamClient.partialUpdateMessage(initialMessage.message.id, 
+      {
+        set: {text: (jsonResponse.content[0] as ToolResponse).input.question || ""},
+      },
+      BOT_USER_ID,
+    );
     return await chatSentStepByStep(message, newState);
   }
   else {
@@ -285,11 +292,6 @@ async function chatSentStepByStep(message: ChatMessage, state: State) {
     });
   console.log(jsonResponse.content[0], state);
   if((jsonResponse.content[0] as ToolResponse).input.fitsUserIssue) {
-    await channel.sendMessage({
-      text: "Look at the guide to solve your issue.",
-    user_id: BOT_USER_ID,  
-      is_ai_generated: true,
-    });
     const newState: State = {
       stage: "step-by-step",
       issue: {

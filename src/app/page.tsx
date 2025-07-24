@@ -6,7 +6,6 @@ import { useState, useRef, useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { motion } from 'motion/react'
 import { useRouter } from 'next/navigation'
-import Image from 'next/image'
   
 type QuickAction = {
   short: string;

@@ -162,7 +162,7 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
     // Update the initial placeholder message to indicate we're transitioning to step-by-step
     await streamClient.partialUpdateMessage(initialMessage.message.id, 
       {
-        set: {text: "Great! I have enough information to help you step by step. Let me prepare a guide for you." },
+        set: {text: "Great! I have enough information to help you step by step. Look at the step-by-step guide I have prepared for you." },
       },
       BOT_USER_ID,
     );

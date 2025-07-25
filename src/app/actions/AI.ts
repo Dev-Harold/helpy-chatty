@@ -123,7 +123,7 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
             },
             question: {
               type: "string",
-              description: "The next question to ask the user to help you understand the issue and get more information. If you have enough information to provide a simple step-by-step solution to the user and make goToStepByStep true, return something along the lines of 'Great! I have enough information to help you step by step. Let me prepare a guide for you.'"
+              description: "The next question to ask the user to help you understand the issue and get more information. Put NONE if you have enough information to provide a simple step-by-step solution to the user and make goToStepByStep true."
             },
             goToStepByStep: {
               type: "boolean",
@@ -162,7 +162,7 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
     // Update the initial placeholder message to indicate we're transitioning to step-by-step
     await streamClient.partialUpdateMessage(initialMessage.message.id, 
       {
-        set: {text: (jsonResponse.content[0] as ToolResponse).input.question || ""},
+        set: {text: "Great! I have enough information to help you step by step. Let me prepare a guide for you." },
       },
       BOT_USER_ID,
     );

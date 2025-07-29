@@ -86,7 +86,7 @@ export default function Home() {
                 <h2 className="text-2xl font-bold text-white mb-2 md:text-4xl">Online assistance for ANY of your devices.</h2>
               </motion.div>
             </div>
-          <div className="flex flex-col gap-4 items-center min-w-[40%] p-6">
+          <form onSubmit={handleSubmit} className="flex flex-col gap-4 items-center min-w-[40%] p-6">
             <h1 className="text-lg italic  md:text-2xl text-gray-800 mb-2 text-center">Describe your problem to get started:</h1>
             <div className="flex-1 w-full flex">
               <textarea
@@ -106,12 +106,10 @@ export default function Home() {
             >
               Chat Now
             </button>
-          </div>
+          </form>
         </div>
 
-          <form onSubmit={handleSubmit} className="bg-white rounded-lg shadow-lg p-6">
-            
-            
+          <div className="bg-white rounded-lg shadow-lg p-6">
             <div className="mt-4">
               <h1 className="text-lg italic  md:text-2xl text-gray-800 mb-2 text-center">Or choose from a common problem below:</h1>
               <div className="flex flex-wrap gap-2 border-2 border-gray-300 rounded-lg p-4 justify-center">
@@ -127,7 +125,7 @@ export default function Home() {
                 ))}
               </div>
             </div>
-          </form>
+          </div>
         </div>
       </main>
       <Footer />

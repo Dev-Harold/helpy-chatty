@@ -94,6 +94,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
   const[showStepsOverlay, setShowStepsOverlay] = useState(false);
   const[initialMessageSent, setInitialMessageSent] = useState(false);
   const[isLoadingState, setIsLoadingState] = useState(true);
+  const[isSendingMessage, setIsSendingMessage] = useState(false);
   const searchParams = useSearchParams();
 
   const pathname = usePathname();
@@ -158,34 +159,41 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
         // Send initial message if provided in URL
         const initialMessage = searchParams.get('message');
         if (initialMessage && !initialMessageSent) {
-          const decodedMessage = decodeURIComponent(initialMessage);
-          console.log('Sending initial message:', decodedMessage);
-          
-          // Send the message through the channel
-          await messageChannel.sendMessage({
-            text: decodedMessage,
-            user_id: ANON_USER_ID,
-          });
-          
-          // Process the message through AI
-          const result = await chatSent({
-            messageId: undefined,
-            channelId: id,
-            text: decodedMessage,
-            userId: ANON_USER_ID,
-          }, state);
-          
-          if (result.success && 'state' in result && result.state) {
-            setState(result.state);
+          setIsSendingMessage(true);
+          try {
+            const decodedMessage = decodeURIComponent(initialMessage);
+            console.log('Sending initial message:', decodedMessage);
+            
+            // Send the message through the channel
+            await messageChannel.sendMessage({
+              text: decodedMessage,
+              user_id: ANON_USER_ID,
+            });
+            
+            // Process the message through AI
+            const result = await chatSent({
+              messageId: undefined,
+              channelId: id,
+              text: decodedMessage,
+              userId: ANON_USER_ID,
+            }, state);
+            
+            if (result.success && 'state' in result && result.state) {
+              setState(result.state);
+            }
+            
+            setInitialMessageSent(true);
+            
+            // Update URL to remove the message parameter using history API
+            const newSearchParams = new URLSearchParams(searchParams.toString());
+            newSearchParams.delete('message');
+            const newUrl = newSearchParams.toString() ? `${pathname}?${newSearchParams.toString()}` : pathname;
+            window.history.replaceState({}, '', newUrl);
+          } catch (error) {
+            console.error('Error sending initial message:', error);
+          } finally {
+            setIsSendingMessage(false);
           }
-          
-          setInitialMessageSent(true);
-          
-          // Update URL to remove the message parameter using history API
-          const newSearchParams = new URLSearchParams(searchParams.toString());
-          newSearchParams.delete('message');
-          const newUrl = newSearchParams.toString() ? `${pathname}?${newSearchParams.toString()}` : pathname;
-          window.history.replaceState({}, '', newUrl);
         }
       } catch (error) {
         console.error('Error initializing chat:', error);
@@ -221,20 +229,27 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
     return <div>Loading chat client...</div>;
   }
   const overrideSubmitHandler = async (message: MessageToSend<DefaultGenerics>) => {
-    const messageToSend = {
-      ...message,
-      mentioned_users: message.mentioned_users?.map(user => user.id)
-    };
-    console.log("Sending message", messageToSend);
-    channel.sendMessage(messageToSend);
-    const result = await chatSent({
-      messageId: message.id,
-      channelId: id,
-      text: message.text,
-      userId: ANON_USER_ID,
-    }, state );
-    if (result.success && 'state' in result && result.state) {
-      setState(result.state);
+    setIsSendingMessage(true);
+    try {
+      const messageToSend = {
+        ...message,
+        mentioned_users: message.mentioned_users?.map(user => user.id)
+      };
+      console.log("Sending message", messageToSend);
+      channel.sendMessage(messageToSend);
+      const result = await chatSent({
+        messageId: message.id,
+        channelId: id,
+        text: message.text,
+        userId: ANON_USER_ID,
+      }, state );
+      if (result.success && 'state' in result && result.state) {
+        setState(result.state);
+      }
+    } catch (error) {
+      console.error('Error sending message:', error);
+    } finally {
+      setIsSendingMessage(false);
     }
   };
 
@@ -263,7 +278,7 @@ export default function ChatPage(props: { params: Promise<{ id: string }> }) {
                 <Window>
           <ChannelHeader />
           <MessageList Message={CustomMessage} />
-          <MessageInput grow overrideSubmitHandler={overrideSubmitHandler} />
+          <MessageInput grow overrideSubmitHandler={overrideSubmitHandler} disabled={isSendingMessage} />
            </Window>
                 </Channel>
               </div>

@@ -86,8 +86,8 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
       If you have enough information to provide a simple step-by-step solution to the user, you must set goToStepByStep to true.
       If you do not have enough information to provide a simple step-by-step solution to the user, you must set goToStepByStep to false.
       Never Repeat the same question to the user.
-      Never ask the user technical questions that the average elderly person would not know the answer to.
-      
+      Never use technical terms that the average elderly person would not know. For example: Tab, Browser, Mac, PC, Website, Tablet, etc.
+
       Here is the conversation history:
       MESSAGE HISTORY:
       ${messagesHistoryAsString}
@@ -251,6 +251,8 @@ async function chatSentStepByStep(message: ChatMessage, state: State) {
     Do not include any other text or formatting in the steps.
     You must use 'step_by_step_instructions' tool to provide step by step instructions.
     You MUST include the step number in the step by step instructions.
+    Never give steps with technical terms that someone with little to no knowledge of technology would know the answer to. IE: "Open a new tab in your browser","Tap on the application icon in the home screen","Do a shortcut to..." 
+    Never use technical terms that the average elderly person would not know. For example: Tab, Browser, Mac, PC, Website, Tablet, etc.
     Here is the conversation history:
     MESSAGE HISTORY:
     ${messagesHistoryAsString}

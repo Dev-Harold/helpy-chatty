@@ -101,7 +101,7 @@ async function chatSentReconnaissance(message: ChatMessage, state: State): Promi
       is_ai_generated: true,
     });
     const jsonResponse = await anthropic.messages.create({
-      model: "claude-3-7-sonnet-latest",
+      model: "claude-sonnet-4-6",
       max_tokens: 1024,
       tools: [{
         name: "store_issue_analysis",
@@ -261,7 +261,7 @@ async function chatSentStepByStep(message: ChatMessage, state: State) {
     CURRENT UNDERSTANDING:
     ${JSON.stringify(state)}`
     const jsonResponse = await anthropic.messages.create({
-      model: "claude-3-7-sonnet-latest",
+      model: "claude-sonnet-4-6",
       max_tokens: 1024,
       tools: [{
         name: "step_by_step_instructions",
